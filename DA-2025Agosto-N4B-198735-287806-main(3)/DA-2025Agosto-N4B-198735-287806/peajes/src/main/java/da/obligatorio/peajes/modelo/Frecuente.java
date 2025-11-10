@@ -1,6 +1,6 @@
 package da.obligatorio.peajes.modelo;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
 public class Frecuente extends Bonificacion {
@@ -17,6 +17,7 @@ public class Frecuente extends Bonificacion {
 
     // Método específico con el contexto necesario para determinar si aplica
     // bonificación frecuente.
+    @Override
     public double calcularBonificacion(Propietario propietario, Vehiculo vehiculo, Puesto puesto, Date fecha) {
         if (propietario == null || vehiculo == null || puesto == null || fecha == null) {
             return 0;
