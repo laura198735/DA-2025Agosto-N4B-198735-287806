@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Login Propietario</title>
+  <link rel="stylesheet" href="/css/auth.css" />
+</head>
+<body>
+  <main class="auth-card" role="main" aria-labelledby="title">
+    <div class="brand">
+      <div class="logo">PG</div>
+      <div>
+        <h1 id="title">Ingreso Propietario</h1>
+        <p class="small">Acceso para propietarios</p>
+      </div>
+    </div>
+
+    <p class="lead">Introduce tu cédula y contraseña.</p>
+
+    <form id="formProp" novalidate>
+      <div class="field">
+        <label class="small" for="cedula">Cédula</label>
+        <input id="cedula" name="cedula" type="text" inputmode="numeric" autocomplete="username" required />
+      </div>
+
+      <div class="field">
+        <label class="small" for="password">Contraseña</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required />
+      </div>
+
+      <div class="actions">
+        <button type="submit" class="primary">Entrar</button>
+        <a class="ghost" href="/login-admin.html">Administrador</a>
+      </div>
+
+      <div id="msg" class="msg" role="status" aria-live="polite"></div>
+    </form>
+
+    <div class="footer">
+      <small>Recuerde mantener sus credenciales seguras.</small>
+    </div>
+  </main>
+
+  <script src="/js/utilesVista.js"></script>
+  <script src="/js/vistaWeb.js"></script>
+  <script>
+    (function(){
+      const form = document.getElementById('formProp');
+      const msg = document.getElementById('msg');
+
+      form.addEventListener('submit', function(e){
+        e.preventDefault();
+        msg.textContent = '';
+        const cedula = form.cedula.value.trim();
+        const password = form.password.value.trim();
+        if(!cedula || !password){
+          msg.className = 'msg error';
+          msg.textContent = 'Complete todos los campos.';
+          return;
+        }
+        const params = new URLSearchParams(new FormData(form)).toString();
+        submit('/loginProp', params, 'POST');
+      });
+
+      window.mostrar_loginExitoso = function(ruta){
+        msg.className = 'msg success';
+        msg.textContent = 'Login correcto. Redirigiendo...';
+        const destino = ruta || '/';
+        setTimeout(() => window.location.href = destino, 500);
+      };
+
+      window.mostrar_loginError = function(texto){
+        msg.className = 'msg error';
+        msg.textContent = texto || 'Credenciales incorrectas.';
+      };
+
+      window.procesarErrorSubmit = function(status, texto){
+        msg.className = 'msg error';
+        msg.textContent = 'Error de servidor (' + status + ').';
+        console.error('Error submit loginProp:', status, texto);
+      };
+    })();
+  </script>
+</body>
+</html>
